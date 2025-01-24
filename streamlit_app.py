@@ -202,16 +202,16 @@ def get_base64_image(image_path):
 
 # Specify the relative path to the image
 image_path = os.path.join("Images", "Download.jpeg")  # Replace with your image name
-base64_image = get_base64_image(image_path
+base64_image = get_base64_image(image_path)
 
 #image_path = "C:/Users/Gomolemo.Kototsi/Downloads/Download.jpeg"  # Replace with your local image path
 #base64_image = get_base64_image(image_path)
-
-# Load users from config file
-with open('C:/Users/Gomolemo.Kototsi\Downloads/passwords.json') as config_file:
-    config = json.load(config_file)
-
-users = config['users']
+# Load users from .streamlit/config.toml
+try:
+    users = st.secrets["users"]  # Accessing users from the secrets
+except KeyError as e:
+    st.error(f"Error loading configuration: {e}")
+    st.stop()
 
 # Hash the passwords
 hashed_users = {username: bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8') for username, password in users.items()}
@@ -220,17 +220,17 @@ hashed_users = {username: bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt
 df = pd.DataFrame(list(hashed_users.items()), columns=['Username', 'Password'])
 
 # Save to Excel
-df.to_excel('credentials.xlsx', index=False)
-
+excel_path = "credentials.xlsx"  # Relative path for the Excel file
+df.to_excel(excel_path, index=False)
 
 # Load the Excel configuration
 try:
-    df = pd.read_excel(r'C:/Users/Gomolemo.Kototsi/Downloads/credentials.xlsx')  # Read the Excel file
+    df = pd.read_excel(excel_path)  # Read the Excel file
     # Convert the DataFrame to a dictionary for easier access
     passwords = dict(zip(df['Username'], df['Password']))
 except Exception as e:
     st.error(f"Error loading configuration: {e}")
-    st.stop()  # Stop execution if the config cannot be loadedp execution if the config cannot be loaded
+    st.stop()
 
 # Function to render CSS based on login state
 def render_css(is_logged_in):
