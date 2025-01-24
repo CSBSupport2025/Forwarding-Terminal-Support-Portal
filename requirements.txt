@@ -8,4 +8,3 @@ plotly
 Pillow
 requests
 bcrypt
-openpyxl
