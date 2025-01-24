@@ -92,20 +92,20 @@ def get_resized_icon(image_path, width):
     return None
 
 #Importing the data that is going to be used in this Project: 
-
-loc = "C:/Users/Gomolemo.Kototsi/Downloads/Gomo_data.csv"
+#/Data/Anele_data.csv
+loc = "/Data/Gomo_data.csv"
 data = get_resized_icon(loc, encoding='ISO-8859-1')
     
-dataA = "C:/Users/Gomolemo.Kototsi/Downloads/Myles_data.csv"
+dataA = "/Data/Myles_data.csv"
 dataA = get_resized_icon(dataA, encoding='ISO-8859-1')
     
-dataB= "C:/Users/Gomolemo.Kototsi/Downloads/Stephen_data.csv"
+dataB= "/Data/Stephen_data.csv"
 dataB = get_resized_icon(dataB, encoding='ISO-8859-1')
     
-dataC = "C:/Users/Gomolemo.Kototsi/Downloads/Esla_data.csv"
+dataC = "/Data/Esla_data.csv"
 dataC = get_resized_icon(dataC, encoding='ISO-8859-1')
     
-dataD = "C:/Users/Gomolemo.Kototsi/Downloads/Anele_data.csv"
+dataD = "/Data/Downloads/Anele_data.csv"
 dataD = get_resized_icon(dataD, encoding='ISO-8859-1')
 
 
