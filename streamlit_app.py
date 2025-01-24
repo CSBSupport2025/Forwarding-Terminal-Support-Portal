@@ -77,20 +77,6 @@ def encode_image(image_file):
         encoded = base64.b64encode(f.read()).decode()
     return f"data:image/svg+xml;base64,{encoded}"
     
-#Loading the data into Python - Data Source Service Now SQL DataBase Sample size to Excel:
-def get_resized_icon(image_path, width):
-    try:
-        img = Image.open(image_path)
-        aspect_ratio = img.height / img.width
-        resized_img = img.resize((width, int(width * aspect_ratio)))
-        buffered = BytesIO()
-        resized_img.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-        return img_str
-    except FileNotFoundError:
-        print(f"File not found: {image_path}")
-    return None
-
 #Importing the data that is going to be used in this Project: 
 #/Data/Anele_data.csv
 loc = "/Data/Gomo_data.csv"
