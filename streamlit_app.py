@@ -71,24 +71,42 @@ st.set_page_config(
 
 
 # In[4]:
-
+#Creating a holding frame for my svg icons: 
+def encode_image(image_file):
+    with open(image_file, 'rb') as f:
+        encoded = base64.b64encode(f.read()).decode()
+    return f"data:image/svg+xml;base64,{encoded}"
+    
+#Loading the data into Python - Data Source Service Now SQL DataBase Sample size to Excel:
+def get_resized_icon(image_path, width):
+    try:
+        img = Image.open(image_path)
+        aspect_ratio = img.height / img.width
+        resized_img = img.resize((width, int(width * aspect_ratio)))
+        buffered = BytesIO()
+        resized_img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        return img_str
+    except FileNotFoundError:
+        print(f"File not found: {image_path}")
+    return None
 
 #Importing the data that is going to be used in this Project: 
 
 loc = "C:/Users/Gomolemo.Kototsi/Downloads/Gomo_data.csv"
-data = pd.read_csv(loc, encoding='ISO-8859-1')
+data = get_resized_icon(loc, encoding='ISO-8859-1')
     
 dataA = "C:/Users/Gomolemo.Kototsi/Downloads/Myles_data.csv"
-dataA = pd.read_csv(dataA, encoding='ISO-8859-1')
+dataA = get_resized_icon(dataA, encoding='ISO-8859-1')
     
 dataB= "C:/Users/Gomolemo.Kototsi/Downloads/Stephen_data.csv"
-dataB = pd.read_csv(dataB, encoding='ISO-8859-1')
+dataB = get_resized_icon(dataB, encoding='ISO-8859-1')
     
 dataC = "C:/Users/Gomolemo.Kototsi/Downloads/Esla_data.csv"
-dataC = pd.read_csv(dataC, encoding='ISO-8859-1')
+dataC = get_resized_icon(dataC, encoding='ISO-8859-1')
     
 dataD = "C:/Users/Gomolemo.Kototsi/Downloads/Anele_data.csv"
-dataD = pd.read_csv(dataD, encoding='ISO-8859-1')
+dataD = get_resized_icon(dataD, encoding='ISO-8859-1')
 
 
 #Merging the Dataframes to have concatinated master data: 
