@@ -122,14 +122,12 @@ def encode_image(image_file):
     with open(image_file, 'rb') as f:
         encoded = base64.b64encode(f.read()).decode()
     return f"data:image/svg+xml;base64,{encoded}"
-
-
 # In[6]:
 
 
 #Mapping Users by country:
-end_list = "C:/Users/Gomolemo.Kototsi/Downloads/sys_user.csv"
-endusers_list= pd.read_csv(end_list, encoding='ISO-8859-1')
+end_list = "/Data/sys_user.csv"
+endusers_list=get_resized_icon(end_list, encoding='ISO-8859-1')
 
 #Coercing the date:                      
 df['sys_updated_on'] = pd.to_datetime(df['sys_updated_on'], format='%d/%m/%Y')
@@ -198,15 +196,16 @@ import streamlit as st
 
 
 # In[20]:
-
-
-# Example usage
 def get_base64_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
-        
-image_path = "C:/Users/Gomolemo.Kototsi/Downloads/Download.jpeg"  # Replace with your local image path
-base64_image = get_base64_image(image_path)
+
+# Specify the relative path to the image
+image_path = os.path.join("Images", "Download.jpeg")  # Replace with your image name
+base64_image = get_base64_image(image_path
+
+#image_path = "C:/Users/Gomolemo.Kototsi/Downloads/Download.jpeg"  # Replace with your local image path
+#base64_image = get_base64_image(image_path)
 
 # Load users from config file
 with open('C:/Users/Gomolemo.Kototsi\Downloads/passwords.json') as config_file:
@@ -380,8 +379,8 @@ import streamlit as st
 # Creating a Sidebar for the New Page: 
 with st.sidebar:
     #st.markdown("<h3 style='text-align: left;'>SLA FILTERI</h3>", unsafe_allow_html=True)
-    
-    st.image("C:/Users/Gomolemo.Kototsi/Downloads/logo-c-fc-steinweg2x.png")
+    st.image("/Data/logo-c-fc-steinweg2x.png", use_column_width=True) 
+    #st.image("C:/Users/Gomolemo.Kototsi/Downloads/logo-c-fc-steinweg2x.png")
     
     # Initial selection summary:
     if st.checkbox("Annual Report", value=True):
@@ -615,14 +614,17 @@ max_user,max_incident_count,percentage = calculate_max_user(name_category_totals
 
 
 # In[33]:
-
-
+# Specify the relative path to the SVG icon
+svg_icon_path = os.path.join("Icons", "icon_name.svg")  # Replace with your SVG icon name
+encoded_svg = encode_image(svg_icon_path)
 # Path to your local SVG file:
-local_svg_path = 'C:/Users/Gomolemo.Kototsi/Downloads/family_history_48dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg'
+local_svg_path = os.path.join("Images", "family_history_48dp_3E6184_FILL0_wght400_GRAD0_opsz48.sv")
 icon_url = encode_image(local_svg_path)
-icon_url1 = encode_image('C:/Users/Gomolemo.Kototsi/Downloads/warning.svg')
-icon_url2 = encode_image('C:/Users/Gomolemo.Kototsi/Downloads/account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg')
-groups_loc = 'C:/Users/Gomolemo.Kototsi/Downloads/group_add_61dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg'
+local_icon_url1 = os.path.join("Images","warning.svg")
+icon_url1 = encode_image(local_icon_url1)
+local_icon_url = os.path.join("Images","account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+icon_url2 = encode_image(local_icon_url)
+groups_loc = os.path.join("Images","group_add_61dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
 groups_icon = encode_image(groups_loc)
 
 
@@ -771,33 +773,38 @@ percentage_total = f'{sum(totals[state]['percentage'] for state in selected_stat
 
 # In[39]:
 
-
-with open("C:/Users/Gomolemo.Kototsi/Downloads/account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+svg_icon_path = os.open("Images", "account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+with open(svg_icon_path, "r") as file:
     svg_icon = file.read()     
-# Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/group_add_61dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+    
+# Getting a icon using CSS style: - Highest
+svg_groups_path = os.open("Images", "group_add_61dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+with open(svg_groups_path, "r") as file:
     groups_icon = file.read()
 
 
 # In[40]:
 
-
-# Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/pending_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+# Getting a icon using CSS style: - Highest
+svg_progress_path = os.open("Images","pending_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg" )
+with open(svg_progress_path, "r") as file:
     svg_progress = file.read()
-# Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/domain_add_64dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+    
+# Getting a icon using CSS style: - Highest
+svg_new_path= os.open("Images", "domain_add_64dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+with open(svg_new_path, "r") as file:
     svg_new = file.read()
 
 
 # In[41]:
-
-
-# Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/editor_choice_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+# Getting a icon using CSS style: - Highest:
+svg_resolved_path= os.open("Images", "editor_choice_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+with open(svg_resolved_path, "r") as file:
     svg_resolved = file.read()
+    
 # Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/dataset_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+svg_total_path = os.open("Images", "dataset_50dp_3E6184_FILL0_wght400_GRAD0_opsz48")
+with open(svg_total_path, "r") as file:
     svg_total = file.read()
 
 
@@ -805,10 +812,12 @@ with open("C:/Users/Gomolemo.Kototsi/Downloads/dataset_50dp_3E6184_FILL0_wght400
 
 
 # Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/back_hand_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg", "r") as file:
+svg_icon_path = os.open("Images", "back_hand_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+with open(svg_icon_path, "r") as file:
     svg_hold = file.read()
-# Getting a icon using CSS style: - Highest 
-with open("C:/Users/Gomolemo.Kototsi/Downloads/delete_forever_40dp_3E6184_FILL0_wght400_GRAD0_opsz40.svg", "r") as file:
+    
+svg_cancelled_path = open.open("Images","delete_forever_40dp_3E6184_FILL0_wght400_GRAD0_opsz40.sv")
+with open(svg_cancelled_path, "r") as file:
     svg_cancelled = file.read()
 
 
