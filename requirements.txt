@@ -1,10 +1,10 @@
 streamlit
-pandas
-numpy
 matplotlib
-streamlit_option_menu
-plotly
-base64
-requests
-PIL
+numpy
+pandas
 folium
+streamlit-option-menu
+plotly
+Pillow
+requests
+bcrypt
