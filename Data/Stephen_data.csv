@@ -1,0 +1,5 @@
+number,due_date,short_description,caller_id,priority,state,assignment_group,assigned_to,sys_updated_on,sys_updated_on_time,u_service_offering_subcategory,calendar_stc,u_request,service_offering,sla_due,business_service,business_duration
+INC0169956,21/11/2024 12:07:39,'JHBAGRI241022'  / 'JHBAGRI241076',Anashrie Naidoo,5 - Very Low,Closed,ZA - Bridge Connect,Stephen Kromhout,13/11/2024,12:00:02,File Closure,85.942,,ZA Bridge Connect,UNKNOWN,ZA Services (to be defined),28800
+INC0177237,23/12/2024 16:33:23,RE: J1336-MIN,Anashrie Naidoo,5 - Very Low,Closed,ZA - Bridge Connect,Stephen Kromhout,16/12/2024,10:00:13,Finance,322.01,,ZA Bridge Connect,UNKNOWN,ZA Services (to be defined),57600
+INC0170129,22/11/2024 09:46:05,RE: JHBMET240961-E01// BLJO-I307,Anashrie Naidoo,5 - Very Low,Closed,ZA - Bridge Connect,Stephen Kromhout,13/11/2024,13:00:11,Finance,64.94,,ZA Bridge Connect,UNKNOWN,ZA Services (to be defined),28800
+INC0081453,13/11/2023 15:16:10,Bridge Connect Branches,Reabetswe Tshetlo,5 - Very Low,Closed,ZA - Bridge Connect,Stephen Kromhout,02/11/2023,16:00:13,Master Data,8.695,,ZA Bridge Connect,UNKNOWN,ZA Services (to be defined),0
