@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+matplotlib
+streamlit_option_menu
+plotly
+base64
+requests
+PIL
+folium
