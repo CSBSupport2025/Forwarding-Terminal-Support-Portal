@@ -9,6 +9,6 @@ Pillow
 requests
 bcrypt
 openpyxl
-PyYAM
+PyYAM ==  6.0.2
 extra-streamlit-components
 streamlit_authenticator
