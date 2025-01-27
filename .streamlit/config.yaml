@@ -1,0 +1,39 @@
+cookie:
+  expiry_days: 30
+  key: some_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    angelac:
+      email: Angela.Coleman@za.steinweg.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: Angela Coleman
+      password: $2b$12$akaOp8qlsVwTN2t/OwSI/.aXfpM69eGT0reFT2N1de2Q7qoROReqG
+    gomolemok:
+      email: Gomolemo.Kototsi@za.steinweg.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: Gomolemo Kototsi
+      password: $2b$12$R/c91/bVSE5EwftmsmUNruOCj6FNHuzE9p.7zLwWL5c3D61JXI6iC
+    jamesk:
+      email: James.Koch@za.steinweg.com
+      failed_login_attempts: 1
+      logged_in: false
+      name: James Koch
+      password: $2b$12$ydtK1RIVCWjDIOslUCB.JO70GOWcIR6SEFV.KnAjzgPBFLC1qsZLe
+    stephenk:
+      email: SystemAdmin@za.steinweg.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: Stephen Kroumhout
+      password: $2b$12$mfd0.dgKKFtDm2Z/u0rKZe.b5rEIeDrfXfw3DIwWqCfJPeV1uwMfO
+    systemadmin:
+      email: SystemAdmin@za.steinweg.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: System Administrator
+      password: $2b$12$iWEywGJnFPk9Hs2xR946OeWN8JwrEsAzJzsXyDl00XU5i/FsKF70S
+pre-authorized:
+  emails:
+  - gomolemo.Kototsi@za.steinweg.com
