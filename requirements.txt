@@ -8,4 +8,7 @@ plotly
 Pillow
 requests
 bcrypt
-openpyxl==3.1.2
+openpyxl
+PyYAM
+extra-streamlit-components
+streamlit_authenticator
