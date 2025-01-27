@@ -316,7 +316,7 @@ if 'authentication_status' not in st.session_state:
 else:
     clear_css()  # Clear authentication styles after login
     st.success(f"Welcome, {st.session_state['name']}!")
-    st.stop()  # Greet the logged-in user
+    #st.stop()  # Greet the logged-in user
     
     # Main application logic goes here:
     # Creating a Sidebar for the New Page: 
