@@ -311,7 +311,7 @@ if 'authentication_status' not in st.session_state:
     base64_image = encode_image(path_image)
     render_auth_css(base64_image)
     st.success(f"Welcome, {st.session_state['name']}!")
-    st.stop()
+    #st.stop()
 
 else:
     clear_css()  # Clear authentication styles after login
