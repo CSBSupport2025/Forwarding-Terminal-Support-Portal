@@ -1,16 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# #Installing the libries: 
-# 
-# !pip install numpy
-# !pip install pandas
-# !pip install streamlit
-# !pip install altair
-# !pip install streamlit_option_menu
-# !pip install folium
-# !pip install plotly
-
 # In[1]:
 
 # Using Important Libraries:
