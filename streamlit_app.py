@@ -229,6 +229,7 @@ def render_auth_css(base64_image):
             [data-testid="stVerticalBlockBorderWrapper"] {{
                 border-radius: 10px !important;
                 border: 5px solid #3e6184 !important;
+                background-color: white;
             }}
             [data-testid="stTextInputRootElement"] {{
                 width: 85%; 
