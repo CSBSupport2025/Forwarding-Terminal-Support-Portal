@@ -79,11 +79,6 @@ def encode_image(image_file):
         encoded = base64.b64encode(f.read()).decode()
     return f"data:image/svg+xml;base64,{encoded}"
 
-def encode_image(image_file):
-    """Encode an SVG image file to a base64 string."""
-    with open(image_file, 'rb') as f:
-        return f"data:image/svg+xml;base64,{base64.b64encode(f.read()).decode()}"
-
 #Importing data into my system: Avoiding instances where my excel file is has str headers: 
 def read_csv_from_url(url: str, encoding='ISO-8859-1') -> pd.DataFrame:
     try:
@@ -197,6 +192,7 @@ color_theme_list = {
 # In[11]:
 
 import streamlit as st
+import time
 import yaml
 import streamlit as st
 from yaml.loader import SafeLoader
@@ -209,24 +205,22 @@ from streamlit_authenticator.utilities import (CredentialsError,
                                                ResetError,
                                                UpdateError)
 
-# Loading config file
-with open('.streamlit/config.yaml', 'r', encoding='utf-8') as file:
-    config = yaml.load(file, Loader=SafeLoader)
-
-
 # Specify the relative path to the image
-image_path = os.path.join("Images", "download.jpeg")  # Replace with your image name
+image_path = os.path.join("Images", "download.jpeg")
+
 base64_image = encode_image(image_path)
 
-# stauth.Hasher.hash_passwords(config['credentials'])
+
+
+
 def render_auth_css(base64_image):
-    # CSS with background image for login state
+    # CSS with background image for login state:
     st.markdown(
         f"""
         <style>
         [data-testid="stApp"] {{
             background-image: url('data:image/jpeg;base64,{base64_image}');
-            background-size: cover; /* Cover the entire area */
+            background-size: cover; 
         }}
         [data-testid="stElementContainer"] {{
             width: 400px; 
@@ -237,7 +231,7 @@ def render_auth_css(base64_image):
             padding: 20px; 
             background-color: rgba(255, 255, 255, 0.8);
         }}
-        [data-testid="stForm"] {{
+        #[data-testid="stForm"] {{
             width: 460px;
             margin: auto; 
             border: 2px solid #3e6184; 
@@ -251,28 +245,19 @@ def render_auth_css(base64_image):
             margin-bottom: 10px; 
         }}
         .stButton {{
-            width: 100%; /* Make button full width */
-            font-family: 'Arial', sans-serif; /* Same font as input */
-            font-size: 20px; /* Font size for button */
+            width: 100%; 
+            font-family: 'Arial', sans-serif;
+            font-size: 20px; 
         }}
         </style>
         """,
-            unsafe_allow_html=True)
+        unsafe_allow_html=True)
+    
+# Loading config file
+with open('.streamlit/config.yaml', 'r', encoding='utf-8') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
-# Function to clear CSS styles
-def clear_css():
-    st.markdown(
-        """
-        <style>
-        [data-testid="stApp"] {
-            background-color: white; /* Clear background */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
-# Creating the authenticator object
+# Creating the authenticator object:
 authenticator = stauth.Authenticate(
     config['credentials'],
     config['cookie']['name'],
@@ -280,46 +265,25 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days']
 )
 
+
 # Creating a login widget:
 try:
-    authenticator.login()
+   authenticator.login()
+   #render_auth_css(base64_image)
+   #st.stop()
 except LoginError as e:
     st.error(e)
 
-# Authenticating user
+
+def show_message():
+    placeholder = st.empty()  # Create an empty placeholder for the message
+    placeholder.write(f'Welcome *{st.session_state["name"]}*')
+    time.sleep(3)  # Wait for 3 seconds
+    placeholder.empty()  # Remove the message
+
+# Authenticating user:
 if st.session_state['authentication_status']:
-    authenticator.logout()
-    st.write(f'Welcome *{st.session_state["name"]}*')
-    #st.title('Some content')
-elif st.session_state['authentication_status'] is False:
-    st.error('Username/password is incorrect')
-elif st.session_state['authentication_status'] is None:
-    st.warning('Please enter your username and password')
-
-# Saving config file
-with open('.streamlit/config.yaml', 'w', encoding='utf-8') as file:
-    yaml.dump(config, file, default_flow_style=False)
-
-# Initialize session state for user tracking if not already set
-if 'authentication_status' not in st.session_state:
-    st.session_state['authentication_status'] = None  # No user logged in
-
-    # Check if the user is logged in
-    is_logged_in = authenticator.logout()
-    # Render CSS only if not is_logged_in:
-    path_image = os.path.join("Images", "download.jpeg")
-    base64_image = encode_image(path_image)
-    render_auth_css(base64_image)
-    st.success(f"Welcome, {st.session_state['name']}!")
-    #st.stop()
-
-else:
-    clear_css()  # Clear authentication styles after login
-    st.success(f"Welcome, {st.session_state['name']}!")
-    #st.stop()  # Greet the logged-in user
-    
-    # Main application logic goes here:
-    # Creating a Sidebar for the New Page: 
+    show_message()
     with st.sidebar:
         #st.markdown("<h3 style='text-align: left;'>SLA FILTERI</h3>", unsafe_allow_html=True)
         # Specify the relative path to the image
@@ -348,10 +312,7 @@ else:
             selected_year = st.multiselect('Select a Year',sorted((clean_df["Year"]).unique()),default=sorted(clean_df["Year"].unique()))
         
         selected_color_theme = st.selectbox('Select a color theme', list(color_theme_list.keys()))
-
-
-# In[23]:
-
+        authenticator.logout()
 
     filtered_data = clean_df[(clean_df['state'].isin(selected_status)) & (clean_df['Month'].isin(selected_month) & (clean_df["Year"].isin(selected_year)))]
 
@@ -430,9 +391,6 @@ else:
             labels={'incidents': 'incidents rate'}
             )
         fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-        # Reverse the color scale: dark = more, light = less
-        # fig.update_traces(colorscale="Viridis", reversescale=True)
-    
         return fig
     
     choropleth = create_choropleth(country_log, counties, selected_color_theme)
@@ -440,7 +398,6 @@ else:
     name_category_totals = filtered_data.groupby(['assignment_group', 'assigned_to','u_service_offering_subcategory'])['number'].count().reset_index(name='Count')
 
     category_totals = filtered_data.groupby(['assignment_group', 'assigned_to'])['number'].count().reset_index(name='Count')
-
 
     def ensure_all_states(df, required_states=None):
         if required_states is None:
@@ -526,21 +483,24 @@ else:
         return max_user, max_incident_count,percentage
    
     max_user,max_incident_count,percentage = calculate_max_user(name_category_totals)
-    #country_totals = name_category_totals.groupby(['assigned_to','country'])['Count'].sum().reset_index()
-    #countries_test=  country_totals.groupby('country')['Count'].sum().reset_index()
-
 
     # Specify the relative path to the SVG icon
     svg_icon_path = os.path.join("Images", "family_history_48dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
     local_icon_url = os.path.join("Images", "account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
     local_icon_url1 = os.path.join("Images","warning.svg")
     groups_loc = os.path.join("Images","group_add_61dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
+    
+    if os.path.exists(groups_loc):
+        with open(groups_loc, "r") as file:
+            groups_icon = file.read()
+    else:
+        None
 
-
-    icon_url = encode_image(svg_icon_path)
+    testing_svg = encode_image(svg_icon_path)
+    #icon_url = encode_image(testing_svg)
     icon_url1 = encode_image(local_icon_url1)
     icon_url2 = encode_image(local_icon_url)
-    groups_icon = encode_image(groups_loc)
+    #groups_icon = encode_image(groups_loc)
 
     service_groups = filtered_data.groupby(['assignment_group','state', 'assigned_to'])['number'].count().reset_index(name='Count')
 
@@ -615,7 +575,6 @@ else:
                 total_counts += 0
     
         return total_counts
-
     def get_state_counts(df, selected_states):
         state_counts = {state: {'count': 0, 'percentage': 0.0} for state in selected_states}
     
@@ -668,33 +627,84 @@ else:
     # The total sum of counts for all selected states
     total_count_overall= int(state_counts.get('total', 0))
     percentage_total = f"{sum(totals[state]['percentage'] for state in selected_status)}%"
+    
+
+    import streamlit as st
+    import os
 
     svg_icon_path = os.path.join("Images", "account_circle_78dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_icon = encode_image(svg_icon_path)  
+
+    # Ensure the file exists and read its contents
+    if os.path.exists(svg_icon_path):
+        with open(svg_icon_path, "r") as file:
+            svg_icon = file.read()
+    else:
+        st.error(f"File not found: {svg_icon_path}")
+    
     
     svg_progress_path = os.path.join("Images","pending_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_progress = encode_image(svg_progress_path)
+    # Ensure the file exists and read its contents
+    if os.path.exists(svg_progress_path):
+        with open(svg_progress_path, "r") as file:
+            svg_progress = file.read()
+    else:
+        None
+        #st.error(f"File not found: {svg_progress_path}")
     
-    # Getting a icon using CSS style: - Highest
+    # Getting a icon using CSS stle: - Highest
     svg_new_path= os.path.join("Images", "domain_add_64dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_new = encode_image(svg_new_path)
+    # Ensure the file exists and read its contents
+    if os.path.exists(svg_new_path):
+        with open(svg_new_path, "r") as file:
+            svg_new = file.read()
+    else:
+        None
+        #st.error(f"File not found: {svg_new_path}")
 
 
     # In[41]:
+
     # Getting a icon using CSS style: - Highest:
     svg_resolved_path= os.path.join("Images","editor_choice_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_resolved = encode_image(svg_resolved_path)
+    if os.path.exists(svg_resolved_path):
+        with open(svg_resolved_path, "r") as file:
+            svg_resolved = file.read()
+    else:
+        None
+        #st.error(f"File not found: {svg_resolved_path}")
+
     
     # Getting a icon using CSS style: - Highest 
     svg_total_path = os.path.join("Images", "dataset_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_total = encode_image(svg_total_path)
-    
+    #svg_total = encode_image(svg_total_path)
+    if os.path.exists(svg_total_path):
+        with open(svg_total_path, "r") as file:
+            svg_total = file.read()
+    else:
+        None
+
+
     # Getting a icon using CSS style: - Highest 
     svg_icon_path = os.path.join("Images", "back_hand_50dp_3E6184_FILL0_wght400_GRAD0_opsz48.svg")
-    svg_hold = encode_image(svg_icon_path)
-    
+    #svg_hold = encode_image(svg_icon_path)
+    if os.path.exists(svg_icon_path):
+        with open(svg_icon_path, "r") as file:
+            svg_hold = file.read()
+    else:
+        None
+        #st.error(f"File not found: {svg_icon_path}")
+
+
+
     svg_cancelled_path = os.path.join("Images","delete_forever_40dp_3E6184_FILL0_wght400_GRAD0_opsz40.svg")
-    svg_cancelled = encode_image(svg_cancelled_path)
+    #svg_cancelled = encode_image(svg_cancelled_path)
+    if os.path.exists(svg_cancelled_path):
+        with open(svg_icon_path, "r") as file:
+            svg_cancelled = file.read()
+
+    else:
+        None
+        #st.error(f"File not found: {svg_cancelled_path}")
 
     # Creating different color schemes - For my States Donut Chart: 
     color_discrete_map = {
@@ -923,3 +933,19 @@ else:
                - IT Personnel Support Workload [**SLA Compliance Contribuion**]: Indicates contribution of IT agents contribution to the overall support of Bridge Connect & BOS System. 
                - Southern & Eastern African Mapbox [**Regional Analyses**]: Illustrates the support provided by local IT team to the **Regional Offices** (in hundreds)
                ''')
+
+elif st.session_state['authentication_status'] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state['authentication_status'] is None:
+    st.warning('Please enter your username and password')
+    #render_auth_css(base64_image)
+    #Rendering the CSS style:
+    path_image = os.path.join("Images", "download.jpeg")
+    base64_image= encode_image(path_image)
+    #
+    #clear_css()
+
+
+# Saving config file:
+with open('.streamlit/config.yaml', 'w', encoding='utf-8') as file:
+    yaml.dump(config, file, default_flow_style=False)
