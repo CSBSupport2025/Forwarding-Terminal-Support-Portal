@@ -207,8 +207,12 @@ from streamlit_authenticator.utilities import (CredentialsError,
 
 # Specify the relative path to the image
 image_path = os.path.join("Images", "download.jpeg")
-
-base64_image = encode_image(image_path)
+if os.path.exists(image_path):
+    with open(image_path, "r") as file:
+        base64_image = file.read()
+else:
+    None
+#base64_image = encode_image(image_path)
 
 
 
