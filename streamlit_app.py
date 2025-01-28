@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
+
+# #Installing the libries: 
+# 
+# !pip install numpy
+# !pip install pandas
+# !pip install streamlit
+# !pip install altair
+# !pip install streamlit_option_menu
+# !pip install folium
+# !pip install plotly
+
 # In[1]:
 
 # Using Important Libraries:
@@ -118,7 +129,7 @@ end_list = "https://raw.githubusercontent.com/CSBSupport2025/Forwarding-Terminal
 endusers_list=read_csv_from_url(end_list, encoding='ISO-8859-1')
 
 #Coercing the date:                      
-df['sys_updated_on'] = pd.to_datetime(df['sys_updated_on' ], format='%d/%m/%Y',errors='coerce')
+df['sys_updated_on'] = pd.to_datetime(df['sys_updated_on' ], format='%d/%m/%Y')
 df['Year'] = df['sys_updated_on'].dt.year
 # Convert to string with desired format
 df['sys_updated_on'] = df['sys_updated_on'].dt.strftime('%m/%d/%Y')
@@ -194,61 +205,53 @@ from streamlit_authenticator.utilities import (CredentialsError,
                                                ResetError,
                                                UpdateError)
 
-# Specify the relative path to the image
-image_path = os.path.join("Images", "download.jpeg")
-if os.path.exists(image_path):
-    with open(image_path, "r") as file:
-        base64_image = file.read()
-else:
-    None
-#base64_image = encode_image(image_path)
-
-
-
+# Function to encode the image to base64
+def encode_image_to_base64(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as file:
+            base64_image = base64.b64encode(file.read()).decode("utf-8")
+            return base64_image
+    else:
+        st.error("Image file not found!")
+        return None
 
 def render_auth_css(base64_image):
-    # CSS with background image for login state:
-    st.markdown(
-        f"""
-        <style>
-        [data-testid="stApp"] {{
-            background-image: url('data:image/jpeg;base64,{base64_image}');
-            background-size: cover; 
-        }}
-        [data-testid="stElementContainer"] {{
-            width: 400px; 
-            height: auto; 
-            margin: auto; 
-            border: 4px solid #3e6184; 
-            border-radius: 10px;
-            padding: 20px; 
-            background-color: rgba(255, 255, 255, 0.8);
-        }}
-        #[data-testid="stForm"] {{
-            width: 460px;
-            margin: auto; 
-            border: 2px solid #3e6184; 
-            border-radius: 10px; 
-            padding: 20px; 
-            background-color: rgba(255, 255, 255, 0.8);
-            margin-top: 120px;
-        }}
-        [data-testid="stTextInputRootElement"] {{
-            width: 85%; 
-            margin-bottom: 10px; 
-        }}
-        .stButton {{
-            width: 100%; 
-            font-family: 'Arial', sans-serif;
-            font-size: 20px; 
+    if base64_image:
+        # CSS with background image for login state:
+        st.markdown(
+            f"""
+            <style>
+            [data-testid="stApp"] {{
+                background-image: url('data:image/jpeg;base64,{base64_image}');
+                background-size: cover;
+                border: 5px solid #3e6184 !important;
+            }}
+            [data-testid="stVerticalBlockBorderWrapper"] {{
+                border-radius: 10px !important;
+                border: 5px solid #3e6184 !important;
+            }}
+            [data-testid="stTextInputRootElement"] {{
+                width: 85%; 
+                margin-bottom: 10px; 
+            }}
+            .stFormSubmitButton {{
+                width: 100%; 
+                font-family: 'Arial', sans-serif;
+                font-size: 20px; 
         }}
         </style>
         """,
         unsafe_allow_html=True)
+    else:
+        st.error("Failed to render background Image.Base64 data is missing")   
     
 # Loading config file
 with open('.streamlit/config.yaml', 'r', encoding='utf-8') as file:
     config = yaml.load(file, Loader=SafeLoader)
+
+# Specify the relative path to the image
+image_path = os.path.join("Images", "download.jpeg")
+base64_image = encode_image_to_base64(image_path)
 
 # Creating the authenticator object:
 authenticator = stauth.Authenticate(
@@ -259,8 +262,13 @@ authenticator = stauth.Authenticate(
 )
 
 
+# Render the login page background image only if the user is not authenticated
+if 'authentication_status' not in st.session_state or not st.session_state['authentication_status']:
+    render_auth_css(base64_image)  # Show the background during login
+
 # Creating a login widget:
 try:
+   #render_auth_css(base64_image)
    authenticator.login()
    #render_auth_css(base64_image)
    #st.stop()
@@ -270,9 +278,19 @@ except LoginError as e:
 
 def show_message():
     placeholder = st.empty()  # Create an empty placeholder for the message
-    placeholder.write(f'Welcome *{st.session_state["name"]}*')
-    time.sleep(3)  # Wait for 3 seconds
+    message = f'Welcome <span style="color: #3e6184; font-weight: bold;">{st.session_state["name"]}</span>'
+    placeholder.markdown(message, unsafe_allow_html=True) 
+    time.sleep(1)  # Wai    #placeholder.write(f'Welcome *{st.session_state["name"]}*')t for 3 seconds
     placeholder.empty()  # Remove the message
+
+
+def show_letter():
+    placekeeper = st.empty()  # Create an empty placeholder for the message
+    letter = f'Goodbye <span style="color: #3e6184; font-weight: bold;">{st.session_state["name"]}</span>'
+    placekeeper.markdown(letter, unsafe_allow_html=True) 
+    time.sleep(1)  # Wai    #placeholder.write(f'Welcome *{st.session_state["name"]}*')t for 3 seconds
+    placekeeper.empty()  # Remove the message
+
 
 # Authenticating user:
 if st.session_state['authentication_status']:
@@ -305,7 +323,9 @@ if st.session_state['authentication_status']:
             selected_year = st.multiselect('Select a Year',sorted((clean_df["Year"]).unique()),default=sorted(clean_df["Year"].unique()))
         
         selected_color_theme = st.selectbox('Select a color theme', list(color_theme_list.keys()))
+        
         authenticator.logout()
+        show_letter()
 
     filtered_data = clean_df[(clean_df['state'].isin(selected_status)) & (clean_df['Month'].isin(selected_month) & (clean_df["Year"].isin(selected_year)))]
 
@@ -926,15 +946,15 @@ if st.session_state['authentication_status']:
                - IT Personnel Support Workload [**SLA Compliance Contribuion**]: Indicates contribution of IT agents contribution to the overall support of Bridge Connect & BOS System. 
                - Southern & Eastern African Mapbox [**Regional Analyses**]: Illustrates the support provided by local IT team to the **Regional Offices** (in hundreds)
                ''')
-
 elif st.session_state['authentication_status'] is False:
     st.error('Username/password is incorrect')
 elif st.session_state['authentication_status'] is None:
     st.warning('Please enter your username and password')
+    show_letter()
     #render_auth_css(base64_image)
     #Rendering the CSS style:
-    path_image = os.path.join("Images", "download.jpeg")
-    base64_image= encode_image(path_image)
+    #path_image = os.path.join("Images", "download.jpeg")
+    #base64_image= encode_image(path_image)
     #
     #clear_css()
 
