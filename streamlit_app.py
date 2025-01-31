@@ -292,7 +292,7 @@ def show_letter():
     time.sleep(1)  # Wai    #placeholder.write(f'Welcome *{st.session_state["name"]}*')t for 3 seconds
     placekeeper.empty()  # Remove the message
 
-
+options = ["ZA - Bridge Connect",  "ZA - BOS Support"]
 # Authenticating user:
 if st.session_state['authentication_status']:
     show_message()
@@ -311,6 +311,11 @@ if st.session_state['authentication_status']:
             selected_month = sorted(clean_df["Month"].unique())
         else:
             selected_month = st.sidebar.multiselect("Select Month",sorted((clean_df["Month"]).unique()),default=sorted(clean_df["Month"].unique()))
+         # Initial selection summary:
+        if st.checkbox("Service Group:", value=True):
+            selected_group = sorted(clean_df["assignment_group"].unique())
+        else:
+            selected_group = st.sidebar.multiselect("Select Ops System",sorted((clean_df["assignment_group"]).unique()),default=sorted(clean_df["assignment_group"].unique()))
         
         if st.checkbox("Overall incidents", value=True):
             selected_status = sorted(clean_df["state"].astype('str').unique())
@@ -328,7 +333,7 @@ if st.session_state['authentication_status']:
         authenticator.logout()
         show_letter()
 
-    filtered_data = clean_df[(clean_df['state'].isin(selected_status)) & (clean_df['Month'].isin(selected_month) & (clean_df["Year"].isin(selected_year)))]
+    filtered_data = clean_df[(clean_df['assignment_group'].isin(selected_group)) & (clean_df['state'].isin(selected_status)) & (clean_df['Month'].isin(selected_month) & (clean_df["Year"].isin(selected_year)))]
 
 
     filtered_category_totals_new = filtered_data.groupby(['state', 'assignment_group'])['number'].count().reset_index(name='Count')
